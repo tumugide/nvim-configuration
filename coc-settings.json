@@ -1,3 +1,9 @@
 {
-  "snippets.ultisnips.pythonPrompt": false
+  "snippets.ultisnips.pythonPrompt": false,
+  "tsserver.autoImportSuggestions": true,
+  "tsserver.suggest.autoImports": true,
+  "prettier.enable": true,
+  "prettier.requireConfig": false,
+  "coc.preferences.formatOnSave": true,
+  "copilot.enable": true
 }
