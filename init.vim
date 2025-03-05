@@ -12,6 +12,8 @@ Plug 'preservim/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-unimpaired'
 Plug 'nordtheme/vim'
+Plug 'tpope/vim-commentary'
+
 call plug#end()
 
 inoremap <silent><expr> <TAB>
@@ -28,7 +30,7 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
- 
+
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice.
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
@@ -37,19 +39,23 @@ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
- 
+
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 set clipboard=unnamedplus
+set number
 
 colorscheme gruvbox
 
-" Find files
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
+"Adding line numbers
+nnoremap <leader>ln :set number!<CR>
+"Find files
+nnoremap <leader>ff <cmd>Telescope fd hidden=false<cr>
 " Grep in files
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 " Buffer search
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <silent> <leader>f :CocCommand prettier.formatFile<CR>
 
 " Enabling the autorelod when changes are made
 set autoread
