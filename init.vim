@@ -4,6 +4,7 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
 Plug 'phpactor/phpactor', {'for': 'php', 'tag': '*', 'do': 'composer install --no-dev -o'}
+Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'SirVer/ultisnips'
@@ -16,6 +17,7 @@ Plug 'tpope/vim-commentary'
 
 call plug#end()
 
+lua require("toggleterm").setup()
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -30,7 +32,7 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
- 
+
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice.
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
@@ -39,7 +41,7 @@ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
- 
+
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 set clipboard=unnamedplus
@@ -57,6 +59,7 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <silent> <leader>f :CocCommand prettier.formatFile<CR>
 
+nnoremap <leader>tt <cmd>ToggleTerm direction=float<cr>
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
 nmap <silent><nowait> [g <Plug>(coc-diagnostic-prev)
