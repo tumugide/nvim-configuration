@@ -5,19 +5,64 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
 Plug 'phpactor/phpactor', {'for': 'php', 'tag': '*', 'do': 'composer install --no-dev -o'}
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
-
+Plug 'njorquera98/monokai_remastered.nvim'
 Plug 'rafi/awesome-vim-colorschemes'
+Plug 'folke/tokyonight.nvim'
+Plug 'EmranMR/tree-sitter-blade'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'preservim/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-unimpaired'
-Plug 'nordtheme/vim'
 Plug 'tpope/vim-commentary'
-
+Plug 'yaegassy/coc-blade', {'do': 'yarn install --frozen-lockfile'}
+Plug 'ThePrimeagen/harpoon'
+Plug 'f-person/git-blame.nvim'
+Plug 'tpope/vim-fugitive' 
 call plug#end()
 
 lua require("toggleterm").setup()
+lua <<EOF
+require('nvim-treesitter.parsers').get_parser_configs().blade = {
+  install_info = {
+    url = 'https://github.com/EmranMR/tree-sitter-blade',
+    files = {'src/parser.c'},
+    branch = 'main',
+  },
+  filetype = 'blade',
+}
+-- Ensure the Treesitter parser for Blade is installed
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "blade" },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+}
+
+-- Associate .blade.php files with the Blade filetype
+vim.filetype.add({
+  extension = {
+    blade = "blade",
+  },
+})
+
+EOF
+
+" Define global extensions for CoC to ensure they are installed
+let g:coc_global_extensions = [
+  \ 'coc-tsserver',
+  \ 'coc-eslint',       
+  \ 'coc-prettier',     
+  \ 'coc-json',         
+  \ 'coc-html',         
+  \ 'coc-css',          
+  \ 'coc-angular',      
+  \ 'coc-phpactor',  
+  \ 'coc-blade',
+  \ 'coc-pyright'
+  \ ]
+
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -46,8 +91,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 set clipboard=unnamedplus
 set number
+set termguicolors     " enable true colors support
+colorscheme tokyonight
 
-colorscheme gruvbox
+" autocmd BufWritePre *.ts,*.tsx,*.js,*.jsx :EslintFixAll
 
 "Adding line numbers
 nnoremap <leader>ln :set number!<CR>
@@ -77,10 +124,9 @@ xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 " Apply the most preferred quickfix action to fix diagnostic on the current line
 nmap <leader>qf  <Plug>(coc-fix-current)
-
+nnoremap <silent> <leader>e :CocCommand eslint.executeAutofix<CR>
 " Remap keys for applying refactor code actions
 nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
-xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
 nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
 " Use K to show documentation in preview window
 nnoremap <silent> K :call ShowDocumentation()<CR>
@@ -110,6 +156,21 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+lua << EOF
+function _G.clear_harpoon_marks()
+    require('harpoon.mark').clear_all()
+    print("All Harpoon marks have been cleared.")
+end
+EOF
+" Harpoon key mappings
+nnoremap <leader>aa :lua require("harpoon.mark").add_file()<CR>
+nnoremap <C-e> :lua require("harpoon.ui").toggle_quick_menu()<CR>
+nnoremap <C-h> :lua require("harpoon.ui").nav_file(1)<CR>
+nnoremap <C-t> :lua require("harpoon.ui").nav_file(2)<CR>
+nnoremap <C-n> :lua require("harpoon.ui").nav_file(3)<CR>
+nnoremap <C-s> :lua require("harpoon.ui").nav_file(4)<CR>
+nnoremap <leader>hc :lua clear_harpoon_marks()<CR>
 
 " Enabling the autorelod when changes are made
 set autoread

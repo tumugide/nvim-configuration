@@ -5,5 +5,22 @@
   "prettier.enable": true,
   "prettier.requireConfig": false,
   "coc.preferences.formatOnSave": true,
-  "copilot.enable": true
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "copilot.enable": true,
+  "languageserver": {
+    "phpactor": {
+      "command": "phpactor",
+      "args": ["language-server"],
+      "trace.server": "verbose",
+      "filetypes": ["php", "blade.php"]
+    }
+  },
+  "eslint.enable": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
 }
